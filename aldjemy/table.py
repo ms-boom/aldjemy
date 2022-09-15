@@ -25,6 +25,8 @@ def foreign_key(field):
         target_field = target.pk.column
 
     target_internal_type = target.get_field(target_field).get_internal_type()
+    if target_internal_type == 'OneToOneField':
+        target_internal_type = target.get_field(target_field).target_field.get_internal_type()
     target_type = DATA_TYPES[target_internal_type](field)
 
     return target_type, ForeignKey("%s.%s" % (target_table, target_field))
